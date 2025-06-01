@@ -46,12 +46,19 @@ async def ask_command(update: Update, context):
     await update.message.reply_text(response_text + "\n\nআপনার কি এই বিষয়ে আরও কিছু জানার আছে, নাকি অন্য কোনো প্রশ্ন আছে?")
     logger.info(f"Answered for user {user_id}: {response_text[:100]}...") # প্রথম ১০০ অক্ষর দেখাবে
 
-async def reset_command(update: Update, context):
-    """ব্যবহারকারীর জন্য কথোপকথন ইতিহাস রিসেট করে।"""
-    user_id = update.effective_user.id
-    response = reset_conversation(user_id)
-    await update.message.reply_text(response + "\nএখন আপনি নতুন প্রশ্ন করতে পারেন।")
-    logger.info(f"User {user_id} reset the conversation.")
+# AlimAI_bot/gemini_integration.py
+
+# ... (অন্যান্য কোড) ...
+
+def reset_conversation(user_id: int):
+    """
+    নির্দিষ্ট ব্যবহারকারীর জন্য কনভারসেশন হিস্টরি রিসেট করে।
+    """
+    if user_id in user_conversations:
+        del user_conversations[user_id]
+        logger.info(f"চ্যাট সেশন রিসেট হলো User ID: {user_id}")
+    # শুধু এই অংশটুকু রিটার্ন করুন, "এখন আপনি নতুন প্রশ্ন করতে পারেন।" অংশটি নয়।
+    return "আপনার পূর্ববর্তী কথোপকথন মুছে ফেলা হয়েছে।"
 
 # --- মেসেজ হ্যান্ডলার্স ---
 
