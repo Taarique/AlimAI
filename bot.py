@@ -4,11 +4,11 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from config import TELEGRAM_BOT_TOKEN
 from gemini_integration import get_gemini_response, reset_conversation
 
-# লগিং সেটআপ করুন যাতে আপনি বটের কার্যক্রম দেখতে পারেন
+# লগিং সেটআপ করুন
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
-logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING) # HTTPX লাইব্রেরির লগিং লেভেল কমানো
 logger = logging.getLogger(__name__)
 
 # --- কমান্ড হ্যান্ডলার্স ---
@@ -24,7 +24,7 @@ async def start(update: Update, context):
         "আপনি যদি নতুন প্রশ্ন করতে চান, তাহলে `/reset` কমান্ড ব্যবহার করতে পারেন।"
     )
     await update.message.reply_text(welcome_message)
-    logger.info(f"User {user_name} started the bot.")
+    logger.info(f"User {user_name} started the bot (ID: {update.effective_user.id}).")
 
 async def ask_command(update: Update, context):
     """/ask কমান্ড ব্যবহার করে প্রশ্ন গ্রহণ করে এবং AlimAI থেকে উত্তর দেয়।"""
@@ -44,7 +44,7 @@ async def ask_command(update: Update, context):
     response_text = get_gemini_response(user_id, query)
 
     await update.message.reply_text(response_text + "\n\nআপনার কি এই বিষয়ে আরও কিছু জানার আছে, নাকি অন্য কোনো প্রশ্ন আছে?")
-    logger.info(f"Answered for user {user_id}: {response_text[:50]}...") # প্রথম ৫০ অক্ষর দেখাবে
+    logger.info(f"Answered for user {user_id}: {response_text[:100]}...") # প্রথম ১০০ অক্ষর দেখাবে
 
 async def reset_command(update: Update, context):
     """ব্যবহারকারীর জন্য কথোপকথন ইতিহাস রিসেট করে।"""
@@ -69,11 +69,18 @@ async def handle_message(update: Update, context):
     response_text = get_gemini_response(user_id, message_text)
 
     await update.message.reply_text(response_text + "\n\nআপনার কি এই বিষয়ে আরও কিছু জানার আছে, নাকি অন্য কোনো প্রশ্ন আছে?")
-    logger.info(f"Answered for user {user_id}: {response_text[:50]}...")
+    logger.info(f"Answered for user {user_id}: {response_text[:100]}...")
 
 
 def main():
     """বট শুরু করার মূল ফাংশন।"""
+    if not TELEGRAM_BOT_TOKEN:
+        logger.error("TELEGRAM_BOT_TOKEN environment variable is not set. Please set it in your .env file.")
+        return
+    if not GEMINI_API_KEY:
+        logger.error("GEMINI_API_KEY environment variable is not set. Please set it in your .env file.")
+        return
+
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
     # কমান্ড হ্যান্ডলার যোগ করুন
@@ -81,7 +88,7 @@ def main():
     application.add_handler(CommandHandler("ask", ask_command))
     application.add_handler(CommandHandler("reset", reset_command))
 
-    # সাধারণ টেক্সট মেসেজ হ্যান্ডলার যোগ করুন
+    # সাধারণ টেক্সট মেসেজ হ্যান্ডলার যোগ করুন (কমান্ড ব্যতীত)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     # বটের জন্য পোলিং শুরু করুন
