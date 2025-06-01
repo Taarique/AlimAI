@@ -1,0 +1,32 @@
+name: Deploy AlimAI Telegram Bot
+
+on:
+  push:
+    branches:
+      - main # main branch এ কোড পুশ করলে ডিপ্লয় হবে
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9' # আপনার পাইথন ভার্সন অনুযায়ী, যেমন '3.9' বা '3.10'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Deploy to Heroku # আপনি যদি Heroku ব্যবহার করেন
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        HEROKU_APP_NAME: alimai-islamic-bot # Heroku তে আপনার অ্যাপের নাম (আপনার পছন্দ অনুযায়ী পরিবর্তন করুন)
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        GEMINI_API_KEY: <span class="math-inline">\{\{ secrets\.GEMINI\_API\_KEY \}\}
+run\: \|
+git remote add heroku https\://heroku\:</span>{HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME}.git
+        git push heroku HEAD:main -f
