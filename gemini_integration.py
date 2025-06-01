@@ -1,27 +1,23 @@
 # AlimAI_bot/gemini_integration.py
 
 import google.generativeai as genai
-from config import GEMINI_API_KEY # নিশ্চিত করুন যে GEMINI_API_KEY ঠিকভাবে ইম্পোর্ট হচ্ছে
+from config import GEMINI_API_KEY
 import logging
 
 logger = logging.getLogger(__name__)
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# এখানে মডেলের নাম পরিবর্তন করুন:
-# model = genai.GenerativeModel('gemini-pro') # এই লাইনটি পরিবর্তন করুন
+# মডেল ইনিশিয়ালাইজ করুন (আপনার প্রয়োজন অনুযায়ী Gemini Pro বা 2.5 Flash ব্যবহার করুন)
+model = genai.GenerativeModel('gemini-2.5-flash') # অথবা 'gemini-pro'
 
-# Gemini 2.5 Flash ব্যবহার করার জন্য:
-# প্রথমে এটি চেষ্টা করুন (যদি GA হয়ে থাকে):
-# model = genai.GenerativeModel('gemini-2.5-flash')
-
-# যদি উপরেরটি কাজ না করে, তাহলে প্রিভিউ সংস্করণটি ব্যবহার করুন:
-model = genai.GenerativeModel('gemini-2.5-flash-preview-05-20')
+# user_conversations ডিকশনারি এখানে সংজ্ঞায়িত করুন, ফাংশনের বাইরে
+user_conversations = {}
 
 def get_gemini_response(user_id: int, message_text: str):
-    """
-    জেমিনি মডেল থেকে উত্তর নিয়ে আসে এবং কনভারসেশন হিস্টরি ম্যানেজ করে।
-    """
+    """জেমিনি মডেল থেকে উত্তর নিয়ে আসে এবং কনভারসেশন হিস্টরি ম্যানেজ করে।"""
+    global user_conversations # এই লাইনটি যোগ করুন, যদিও এটি ঐচ্ছিক
+
     if user_id not in user_conversations:
         # নতুন চ্যাট সেশন শুরু করুন
         # মডেলকে ইসলামী পণ্ডিতের মতো আচরণ করার জন্য প্রাথমিক নির্দেশনা দিন
