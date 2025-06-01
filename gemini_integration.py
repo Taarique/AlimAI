@@ -1,18 +1,22 @@
+# AlimAI_bot/gemini_integration.py
+
 import google.generativeai as genai
-from config import GEMINI_API_KEY
+from config import GEMINI_API_KEY # নিশ্চিত করুন যে GEMINI_API_KEY ঠিকভাবে ইম্পোর্ট হচ্ছে
 import logging
 
 logger = logging.getLogger(__name__)
 
-# জেমিনি API কী কনফিগার করুন
 genai.configure(api_key=GEMINI_API_KEY)
 
-# জেমিনি মডেল ইনিশিয়ালাইজ করুন
-model = genai.GenerativeModel('gemini-pro')
+# এখানে মডেলের নাম পরিবর্তন করুন:
+# model = genai.GenerativeModel('gemini-pro') # এই লাইনটি পরিবর্তন করুন
 
-# কনভারসেশন হিস্টরি সংরক্ষণের জন্য একটি ডিকশনারি
-# প্রতিটি ব্যবহারকারীর জন্য আলাদা হিস্টরি থাকবে
-user_conversations = {}
+# Gemini 2.5 Flash ব্যবহার করার জন্য:
+# প্রথমে এটি চেষ্টা করুন (যদি GA হয়ে থাকে):
+# model = genai.GenerativeModel('gemini-2.5-flash')
+
+# যদি উপরেরটি কাজ না করে, তাহলে প্রিভিউ সংস্করণটি ব্যবহার করুন:
+model = genai.GenerativeModel('gemini-2.5-flash-preview-05-20')
 
 def get_gemini_response(user_id: int, message_text: str):
     """
