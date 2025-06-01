@@ -21,7 +21,7 @@ async def start(update: Update, context):
         "আমি AlimAI, আপনার ইসলামী জ্ঞান অর্জনের ডিজিটাল সঙ্গী। "
         "কোরআন, হাদিস, ফিকহ, মানতিক, ইতিহাস এবং বিজ্ঞান সহ ইসলামী জ্ঞানের বিভিন্ন বিষয়ে আপনাকে সহায়তা করতে আমি প্রস্তুত।\n\n"
         "যেকোনো ইসলামী বিষয়ে জানতে আমাকে প্রশ্ন করুন। "
-        "আপনি যদি নতুন প্রশ্ন করতে চান, তাহলে `/reset` কমান্ড ব্যবহার করতে পারেন।"
+        "আপনি যদি নতুন প্রশ্ন করতে চান, তাহলে /reset কমান্ড ব্যবহার করতে পারেন।"
     )
     await update.message.reply_text(welcome_message)
     logger.info(f"User {user_name} started the bot (ID: {update.effective_user.id}).")
@@ -33,7 +33,7 @@ async def ask_command(update: Update, context):
 
     if not query:
         await update.message.reply_text(
-            "অনুগ্রহ করে `/ask` এর পরে আপনার প্রশ্নটি লিখুন।\n"
+            "অনুগ্রহ করে /ask এর পরে আপনার প্রশ্নটি লিখুন।\n"
             "উদাহরণ: `/ask সালাতের ফরয কয়টি?`"
         )
         return
