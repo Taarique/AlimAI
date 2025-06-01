@@ -1,3 +1,3 @@
-python-telegram-bot==20.10 # এখানে সর্বশেষ স্টেবল ভার্সনটি দিন
+python-telegram-bot==22.1 # এখানে সর্বশেষ স্টেবল ভার্সনটি দিন
 google-generativeai
 python-dotenv
