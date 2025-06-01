@@ -1,7 +1,7 @@
 import logging
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
-from config import TELEGRAM_BOT_TOKEN
+from config import TELEGRAM_BOT_TOKEN, GEMINI_API_KEY # GEMINI_API_KEY যোগ করুন
 from gemini_integration import get_gemini_response, reset_conversation
 
 # লগিং সেটআপ করুন
