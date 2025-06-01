@@ -1,32 +1,32 @@
-name: Deploy AlimAI Telegram Bot
+name: Run AlimAI Telegram Bot (for testing/verification) # Workflow এর নাম
 
 on:
   push:
     branches:
-      - main # main branch এ কোড পুশ করলে ডিপ্লয় হবে
+      - main # যখন main ব্রাঞ্চে কোড পুশ করা হবে, তখন এটি ট্রিগার হবে।
+  workflow_dispatch: # হাতে চালানো (Manually trigger) করার অনুমতি দেয়।
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  run_bot:
+    runs-on: ubuntu-latest # এই Workflow Ubuntu অপারেটিং সিস্টেমে চলবে।
 
     steps:
-    - name: Checkout code
+    - name: Checkout code # GitHub রিপোজিটরি থেকে কোড চেকআউট (ডাউনলোড) করে।
       uses: actions/checkout@v2
 
-    - name: Set up Python
+    - name: Set up Python # পাইথন এনভায়রনমেন্ট সেটআপ করে।
       uses: actions/setup-python@v2
       with:
-        python-version: '3.9' # আপনার পাইথন ভার্সন অনুযায়ী, যেমন '3.9' বা '3.10'
+        python-version: '3.9' # আপনার প্রোজেক্টের জন্য ব্যবহৃত পাইথন ভার্সন। প্রয়োজন অনুযায়ী পরিবর্তন করুন।
 
-    - name: Install dependencies
+    - name: Install dependencies # requirements.txt ফাইলে উল্লেখিত সকল পাইথন লাইব্রেরি ইনস্টল করে।
       run: pip install -r requirements.txt
 
-    - name: Deploy to Heroku # আপনি যদি Heroku ব্যবহার করেন
+    - name: Run AlimAI Bot # আপনার বটকে চালানোর চেষ্টা করে।
       env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        HEROKU_APP_NAME: alimai-islamic-bot # Heroku তে আপনার অ্যাপের নাম (আপনার পছন্দ অনুযায়ী পরিবর্তন করুন)
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-        GEMINI_API_KEY: <span class="math-inline">\{\{ secrets\.GEMINI\_API\_KEY \}\}
-run\: \|
-git remote add heroku https\://heroku\:</span>{HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME}.git
-        git push heroku HEAD:main -f
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} # GitHub Secrets থেকে Telegram Bot Token নেয়।
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }} # GitHub Secrets থেকে Gemini API Key নেয়।
+      run: |
+        echo "Starting AlimAI Bot..."
+        python bot.py
+        echo "AlimAI Bot has finished its run." # GitHub Actions এর এই ধাপটি শেষ হবে যখন bot.py শেষ হবে।
