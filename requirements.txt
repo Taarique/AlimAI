@@ -1,3 +1,3 @@
-python-telegram-bot==21.0
-google-generativeai==0.6.0
-python-dotenv==1.0.0 # Only needed for local development using .env file
+python-telegram-bot==20.x # সর্বশেষ স্টেবল ভার্সন ব্যবহার করুন
+google-generativeai
+python-dotenv
