@@ -6,15 +6,14 @@ import os
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("gemini_integration")
 
-# Gemini API কনফিগারেশন
+# API কী কনফিগারেশন
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# গ্লোবাল model ও chat session
-model = genai.GenerativeModel("gemini-1.5-flash")
+# গ্লোবাল মডেল ও চ্যাট সেশন
+model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 chat_session = model.start_chat(history=[])
 
 def get_gemini_response(prompt: str) -> str:
-    global chat_session
     try:
         response = chat_session.send_message(prompt)
         return response.text
